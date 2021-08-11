@@ -1,4 +1,4 @@
-// This file is part of www.nand2tetris.org
+//art of www.nand2tetris.org
 // and the book "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
 // File name: projects/02/HalfAdder.hdl
@@ -14,4 +14,16 @@ CHIP HalfAdder {
 
     PARTS:
     // Put you code here:
+    And(a=a, b=b, out=carry);
+    Not(in=a, out=na);
+    Not(in=b, out=nb);
+    And(a=na, b=b, out=ab);
+    And(a=a, b=nb, out=ba);
+    Or(a=ab, b=ba, out=sum);
+
+    /*
+    Xor for sum
+    And for carry
+	*/
 }
+

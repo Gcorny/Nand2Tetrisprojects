@@ -14,4 +14,27 @@ CHIP FullAdder {
 
     PARTS:
     // Put you code here:
+    Not(in=a, out=na);
+    Not(in=b, out=nb);
+    Not(in=c, out=nc);
+    And(a=b, b=c, out = bc);
+    Xor(a=b, b=c, out=bxc);
+    And(a=a, b=bxc, out=abxc);
+    Or(a=bc, b=abxc, out=carry);
+
+
+    
+    And(a=na, b=bxc, out=nabxc);
+    
+    And(a=nb, b=nc, out=nbc);
+    And(a=b, b=c, out=bcc);
+    Or(a=nbc, b=bcc, out=oo);
+    And(a=a, b=oo, out=aoo);
+    
+    Or(a=nabxc, b=aoo, out=sum);
+ /*
+ HalfAdder(a=a,b=b,sum=ab,carry=cab);
+HalfAdder(a=c,b=ab,sum=sum,carry=s);
+Or(a=cab,b=s,out=carry);
+*/
 }
