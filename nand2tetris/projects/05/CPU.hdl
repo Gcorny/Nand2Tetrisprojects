@@ -40,4 +40,59 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+    // A-ins and C-ins
+    // for C : i xx a c1c2c3c4c5c6 d1d2d3 j1j2j3
+    // A : i and the rest is just an address or a value
+    Not(in=instruction[15], out=isinsA);
+    
+    //a : 0 =A or A , 1: M or D
+    //d1 : A or M
+    //d2 : D
+    //d3 : M
+    
+    Mux16(a=outMM, b=instruction, sel=isinsA, out=outins);
+
+    Or(a=isinsA, b=instruction[5], out=inA);
+    ARegister(in=outins, load=inA, out=Areg, out[0..14]=addressM);
+    
+
+    And(a=instruction[15], b=instruction[12], out=inMux);
+    Mux16(a=Areg, b=inM, sel=inMux, out=inALU);
+    
+    And(a=instruction[15], b=instruction[4], out=inD);
+    DRegister(in=outMM, load=inD, out=Dreg);
+
+
+    ALU(x=Dreg, y=inALU, zx=instruction[11] ,nx=instruction[10] ,zy=instruction[9] ,ny=instruction[8] ,f=instruction[7] ,no=instruction[6] ,out=outM, out=outMM ,zr=zr ,ng=ng);
+
+    //WriteM
+    And(a=instruction[15], b=instruction[3], out=writeM);
+
+
+    //j1 = less
+    //j2 = equal
+    //j3 = greater
+    //check if the result is greater
+
+    Not(in=zr, out=nzr);
+    Not(in=ng, out=nng);
+    And(a=nzr, b=nng, out=nzrpo);
+
+
+    And(a=instruction[15], b=instruction[0], out=j3);
+    And(a=nzrpo, b=j3, out=jgt);
+
+    And(a=instruction[15], b=instruction[1], out=j2);
+    And(a=zr, b=j2, out=jeq);
+
+    And(a=instruction[15], b=instruction[2], out=j1);
+    And(a=ng, b=j1, out=jlt);
+
+    Or(a=jgt, b=jeq, out=load1);
+    Or(a=load1, b=jlt, out=load2);
+    PC(in=Areg, load=load2, inc=true, reset=reset, out[0..14]=pc);
+
+    
+
+
 }

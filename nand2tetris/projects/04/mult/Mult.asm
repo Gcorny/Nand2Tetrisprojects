@@ -10,3 +10,47 @@
 // R0 >= 0, R1 >= 0, and R0*R1 < 32768.
 
 // Put your code here.
+
+//initializing the variables
+
+@R2
+M=0
+
+
+@R1
+D = M
+@END
+D ; JEQ
+
+@R0
+D=M
+
+@END// output 0 for R2 and terminate the program
+D; JEQ
+
+
+@n
+M=D // n = number of iterations
+
+
+(LOOP)
+@R1
+D=M
+@R2
+M=D + M
+
+@n
+M = M -1
+D=M
+
+@END
+D; JEQ
+
+@LOOP
+0; JMP
+
+
+
+(END)
+@END
+0; JMP
